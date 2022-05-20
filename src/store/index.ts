@@ -2,7 +2,6 @@ import postsModel from "@/models/posts.model";
 import { InjectionKey } from "vue";
 import { createStore, useStore as baseUseStore, Store } from "vuex";
 import postsApi from "@/api/posts";
-import { log } from "console";
 
 export interface State {
   posts: postsModel[];

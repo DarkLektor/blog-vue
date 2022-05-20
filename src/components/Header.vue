@@ -23,7 +23,11 @@
           id="navbarSupportedContent"
           :class="{ show: showMenu }"
         >
-          <form class="d-flex ms-auto" role="search">
+          <form
+            class="d-flex ms-auto"
+            role="search"
+            @submit.prevent="searchPosts"
+          >
             <input
               class="form-control me-2"
               type="search"
@@ -32,13 +36,7 @@
               v-model="query"
             />
 
-            <button
-              class="btn btn-outline-light"
-              type="submit"
-              @click.prevent="searchPosts"
-            >
-              Search
-            </button>
+            <button class="btn btn-outline-light" type="submit">Search</button>
           </form>
         </div>
       </div>

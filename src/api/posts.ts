@@ -1,4 +1,3 @@
-import { log } from "console";
 import axios from "axios";
 
 const api_url = import.meta.env.VITE_APP_API_URL;
@@ -6,7 +5,6 @@ const api_url = import.meta.env.VITE_APP_API_URL;
 export default {
   getPosts(page: number = 1) {
     const start: number = page === 1 ? 0 : (page - 1) * 10;
-
     const url: string = `${api_url}/posts?limit=10&skip=${start}`;
 
     return axios.get(url).then((res) => {
