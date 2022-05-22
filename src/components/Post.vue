@@ -5,44 +5,35 @@
     <h3 class="posts-item-title">{{ post.title }}</h3>
     <p>{{ post.body }}</p>
 
-    <div
-      v-if="showComments && !noComments"
-      class="posts-item-comments mb-4 w-100 bg-light rounded p-4 pb-2"
-    >
-      <article
-        v-for="(comment, index) in comments"
-        :key="index"
-        class="border-bottom"
-        :class="{
-          'border-bottom-0': comments.length - 1 === index,
-          'pt-2': index !== 0,
-        }"
-      >
-        <a href="#" class="fw-semibold text-decoration-none">{{
-          comment.user.username
-        }}</a>
-        <p class="my-2">{{ comment.body }}</p>
-      </article>
-    </div>
+    <div :id="'comments-' + post.id" class="posts-item-comments collapse w-100">
+      <p v-if="noComments" class="mb-4">No comments</p>
 
-    <p v-if="noComments" class="mb-4">No comments</p>
+      <div v-else class="wrapper rounded p-4 pb-2 mb-4 w-100 bg-light">
+        <CommentsList :comments="comments" />
+      </div>
+    </div>
 
     <button
       class="btn btn-dark ms-auto"
+      data-bs-toggle="collapse"
+      :data-bs-target="'#comments-' + post.id"
+      aria-expanded="false"
+      :aria-controls="'comments-' + post.id"
       @click="getComments(post.id)"
       :disabled="loading"
     >
-      <span v-if="!showComments">Show comments</span>
-      <span v-if="showComments">Hide comments</span>
+      <span v-if="!isShowComments">Show comments</span>
+      <span v-else>Hide comments</span>
     </button>
   </article>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import postsApi from "@/api/posts";
+import CommentsList from "./CommentsList.vue";
 
-type commentsType = {
+type Comments = {
   id: number;
   body: string;
   postId: number;
@@ -53,19 +44,19 @@ type commentsType = {
 };
 
 const { post } = defineProps(["post"]);
-const comments = ref<commentsType[]>([]);
+const comments = ref<Comments[]>([]);
 const noComments = ref<boolean>(false);
-const showComments = ref<boolean>(false);
+const isShowComments = ref<boolean>(false);
 const loading = ref<boolean>(false);
 
 async function getComments(id: number) {
-  if (comments.value.length === 0 && !noComments.value) {
+  if (!comments.value.length && !noComments.value) {
     loading.value = true;
     comments.value = await postsApi.getCommentsById(id);
-    noComments.value = comments.value.length === 0;
+    noComments.value = !comments.value.length;
   }
 
-  showComments.value = !showComments.value;
+  isShowComments.value = !isShowComments.value;
   loading.value = false;
 }
 </script>

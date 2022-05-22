@@ -12,19 +12,20 @@
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          @click="showMenu = !showMenu"
-          :class="{ collapsed: showMenu }"
         >
-          <span class="navbar-toggler-icon"></span>
+          <img
+            src="@/assets/search.svg"
+            :style="{ width: '20px', height: '25px' }"
+          />
         </button>
 
         <div
-          class="collapse navbar-collapse align-items-center pt-lg-0 pt-3"
+          class="collapse navbar-collapse align-items-center"
           id="navbarSupportedContent"
           :class="{ show: showMenu }"
         >
           <form
-            class="d-flex ms-auto"
+            class="d-flex ms-auto mt-lg-0 mt-3"
             role="search"
             @submit.prevent="searchPosts"
           >
@@ -35,7 +36,6 @@
               aria-label="Search"
               v-model="query"
             />
-
             <button class="btn btn-outline-light" type="submit">Search</button>
           </form>
         </div>
